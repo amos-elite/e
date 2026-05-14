@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amos Elite · Téléchargement gratuit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%231A3A6B' d='M216 0c-13.3 0-24 10.7-24 24l0 368c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-368c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 368c0 39.8 32.2 72 72 72s72-32.2 72-72l0-368c0-13.3-10.7-24-24-24zM464 0c-13.3 0-24 10.7-24 24l0 368c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-368c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 368c0 39.8 32.2 72 72 72s72-32.2 72-72l0-368c0-13.3-10.7-24-24-24zM8 128c-4.4 0-8 3.6-8 8l0 336c0 22.1 17.9 40 40 40l416 0c22.1 0 40-17.9 40-40l0-336c0-4.4-3.6-8-8-8s-8 3.6-8 8l0 336c0 13.3-10.7 24-24 24L40 496c-13.3 0-24-10.7-24-24l0-336c0-4.4-3.6-8-8-8z'/%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #F5F3EF;
+    --surface: #FFFFFF;
+    --text: #1A1A1A;
+    --text-muted: #5A5A5A;
+    --accent: #1B4D3E;
+    --accent-light: #E8F3EF;
+    --gold: #B8922E;
+    --border: #EAEAEA;
+    --radius: 12px;
+    --shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+/* Container principal centré */
+.book-container {
+    max-width: 480px;
+    width: 100%;
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    text-align: center;
+}
+
+/* En-tête */
+.book-header {
+    background: var(--accent);
+    padding: 28px 24px;
+}
+.book-header .badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 30px;
+    margin-bottom: 16px;
+}
+.book-header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    color: white;
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+.book-header .sub {
+    color: rgba(255,255,255,0.75);
+    font-size: 14px;
+    font-style: italic;
+}
+
+/* Couverture - cliquable */
+.cover-wrapper {
+    cursor: pointer;
+    padding: 40px 40px 20px;
+    background: var(--surface);
+}
+.book-cover {
+    aspect-ratio: 3 / 4;
+    max-width: 280px;
+    margin: 0 auto;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    position: relative;
+    background: #f0f0f0;
+}
+.book-cover:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 35px rgba(0,0,0,0.2);
+}
+.book-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    background: #f5f5f5;
+}
+.cover-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.25s;
+}
+.book-cover:hover .cover-overlay {
+    background: rgba(0,0,0,0.45);
+}
+.eye-icon {
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.25s, transform 0.25s;
+    background: rgba(255,255,255,0.95);
+    border-radius: 50%;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.book-cover:hover .eye-icon {
+    opacity: 1;
+    transform: scale(1);
+}
+.badge-free {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--accent);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 30px;
+    z-index: 2;
+}
+
+/* Infos livre */
+.book-info {
+    padding: 0 32px 24px;
+}
+.book-category {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+}
+.book-info h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+.book-info .book-sub {
+    font-size: 14px;
+    font-style: italic;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+}
+.book-info .book-desc {
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+}
+.btn-download {
+    width: 100%;
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 14px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-radius: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background 0.2s, gap 0.2s;
+}
+.btn-download:hover {
+    background: #0f3a2e;
+    gap: 14px;
+}
+
+/* Footer */
+.footer {
+    margin-top: 24px;
+    text-align: center;
+}
+.footer p {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+/* ========== MODALS ========== */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.86);
+    backdrop-filter: blur(12px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0.2s, opacity 0.2s;
+    padding: 20px;
+}
+.modal-overlay.open {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Modal aperçu */
+.modal-preview {
+    background: var(--surface);
+    width: 100%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: var(--radius);
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    position: relative;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+.modal-overlay.open .modal-preview {
+    transform: translateY(0);
+}
+.modal-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: rgba(0,0,0,0.08);
+    border: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    z-index: 10;
+}
+.preview-cover {
+    background: #121212;
+    border-radius: var(--radius) 0 0 var(--radius);
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.preview-cover img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+}
+.preview-badge {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    background: var(--accent);
+    color: white;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 5px 12px;
+    border-radius: 30px;
+}
+.preview-info {
+    padding: 36px 32px;
+}
+.preview-category {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+}
+.preview-info h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+.preview-sub {
+    font-size: 15px;
+    font-style: italic;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+}
+.preview-desc {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+}
+.preview-meta {
+    display: flex;
+    gap: 28px;
+    margin-bottom: 32px;
+}
+.preview-meta-item .meta-label {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #999;
+}
+.preview-meta-item .meta-value {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+}
+.btn-preview-download {
+    width: 100%;
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 14px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    border-radius: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* Modal formulaire */
+.modal-form {
+    background: var(--surface);
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: var(--radius);
+    position: relative;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+.modal-overlay.open .modal-form {
+    transform: translateY(0);
+}
+.form-header {
+    background: var(--accent);
+    padding: 32px 32px 28px;
+    text-align: center;
+}
+.form-header .eyebrow {
+    color: rgba(255,255,255,0.8);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+.form-header h3 {
+    font-family: 'Cormorant Garamond', serif;
+    color: white;
+    font-size: 28px;
+    font-weight: 600;
+}
+.form-body {
+    padding: 32px;
+}
+.form-note {
+    background: var(--accent-light);
+    border-left: 3px solid var(--accent);
+    padding: 14px 16px;
+    font-size: 13px;
+    color: var(--accent);
+    margin-bottom: 24px;
+    border-radius: 6px;
+}
+.field-group {
+    margin-bottom: 18px;
+}
+.field-group label {
+    display: block;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--text);
+    margin-bottom: 6px;
+}
+.field-group input,
+.field-group select {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 11px 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+}
+.field-group input:focus,
+.field-group select:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+.row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+.checkbox-group {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin: 22px 0 26px;
+}
+.checkbox-group input {
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    accent-color: var(--accent);
+}
+.checkbox-group span {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.45;
+}
+.btn-submit {
+    width: 100%;
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 14px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    border-radius: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.btn-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+.loader {
+    display: none;
+    text-align: center;
+    padding: 16px;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+.success-view {
+    display: none;
+    text-align: center;
+    padding: 48px 32px;
+}
+.success-icon {
+    width: 64px;
+    height: 64px;
+    background: var(--accent);
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.success-icon svg { color: white; }
+.success-view h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+.success-view p {
+    color: var(--text-muted);
+    margin-bottom: 20px;
+}
+.btn-retry {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 10px 22px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-radius: 30px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+.btn-close-modal {
+    background: transparent;
+    border: 1px solid var(--border);
+    padding: 10px 24px;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 30px;
+    cursor: pointer;
+}
+.quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    font-style: italic;
+    color: var(--accent);
+    margin-top: 20px;
+    padding: 14px 16px;
+    background: var(--accent-light);
+    border-radius: 8px;
+}
+
+@media (max-width: 640px) {
+    .modal-preview { grid-template-columns: 1fr; max-width: 380px; }
+    .preview-cover { min-height: auto; border-radius: var(--radius) var(--radius) 0 0; padding: 20px; background: #121212; }
+    .preview-cover img { max-height: 280px; width: auto; margin: 0 auto; }
+    .preview-info { padding: 24px; }
+    .row-2 { grid-template-columns: 1fr; }
+    .book-container { max-width: 100%; }
+    .cover-wrapper { padding: 32px 24px 16px; }
+    .book-info { padding: 0 24px 24px; }
+}
+
+@media (max-width: 480px) {
+    .book-cover { max-width: 100%; }
+    .cover-wrapper { padding: 24px 20px 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="book-container">
+    <div class="book-header">
+        <div class="badge">Collection Amos Elite</div>
+        <h1>Téléchargement gratuit</h1>
+        <div class="sub">Recevez votre exemplaire en PDF</div>
+    </div>
+
+    <div class="cover-wrapper" onclick="openPreview()">
+        <div class="book-cover">
+            <img src="re.jpeg" alt="Oui, tu peux sortir des dettes" onerror="this.src='https://placehold.co/400x533/1B4D3E/white?text=Amos+Elite'">
+            <div class="cover-overlay">
+                <div class="eye-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                </div>
+            </div>
+            <span class="badge-free">Gratuit · PDF</span>
+        </div>
+    </div>
+
+    <div class="book-info">
+        <div class="book-category">Finances · 96 pages</div>
+        <h2>Oui, tu peux sortir des dettes</h2>
+        <div class="book-sub">Le chemin biblique vers la liberté financière</div>
+        <div class="book-desc">
+            Comprendre ce qui vous maintient dans l'endettement, agir pour briser la chaîne, 
+            décréter votre nouveau nom : prêteur, et non emprunteur.
+        </div>
+        <button class="btn-download" onclick="openPreview()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Télécharger gratuitement
+        </button>
+    </div>
+</div>
+
+<div class="footer">
+    <p>© 2026 Amos Elite — Collection Amos Elite</p>
+</div>
+
+<!-- MODAL APERÇU -->
+<div class="modal-overlay" id="previewModal">
+    <div class="modal-preview">
+        <button class="modal-close" onclick="closePreviewModal()">✕</button>
+        <div class="preview-cover" id="previewCover">
+            <img src="re.jpeg" alt="Couverture">
+            <span class="preview-badge">Gratuit · PDF</span>
+        </div>
+        <div class="preview-info">
+            <div class="preview-category">Finances</div>
+            <h2>Oui, tu peux sortir des dettes</h2>
+            <div class="preview-sub">Le chemin biblique vers la liberté financière</div>
+            <div class="preview-desc">
+                Comprendre ce qui vous maintient dans l'endettement, agir pour briser la chaîne, 
+                décréter votre nouveau nom : prêteur, et non emprunteur. Un ouvrage pratique et 
+                spirituel pour retrouver une liberté financière durable selon les principes bibliques.
+            </div>
+            <div class="preview-meta">
+                <div class="preview-meta-item"><div class="meta-label">Auteur</div><div class="meta-value">Amos Elite</div></div>
+                <div class="preview-meta-item"><div class="meta-label">Format</div><div class="meta-value">PDF numérique</div></div>
+                <div class="preview-meta-item"><div class="meta-label">Pages</div><div class="meta-value">96</div></div>
+            </div>
+            <button class="btn-preview-download" onclick="closePreviewModal(); openFormModal()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                Télécharger gratuitement
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL FORMULAIRE -->
+<div class="modal-overlay" id="formModal">
+    <div class="modal-form">
+        <button class="modal-close" onclick="closeFormModal()">✕</button>
+        <div id="formContainer">
+            <div class="form-header">
+                <div class="eyebrow">Téléchargement gratuit</div>
+                <h3 id="formBookTitle">Oui, tu peux sortir des dettes</h3>
+            </div>
+            <div class="form-body">
+                <div class="form-note" id="formNote">
+                    Renseignez vos coordonnées pour recevoir votre livre en PDF immédiatement.
+                </div>
+                <div class="row-2">
+                    <div class="field-group"><label>Prénom *</label><input type="text" id="firstName" autocomplete="given-name"></div>
+                    <div class="field-group"><label>Nom *</label><input type="text" id="lastName" autocomplete="family-name"></div>
+                </div>
+                <div class="field-group"><label>Email *</label><input type="email" id="email" autocomplete="email"></div>
+                <div class="field-group"><label>Téléphone / WhatsApp *</label><input type="tel" id="phone" autocomplete="tel"></div>
+                <div class="field-group"><label>Pays</label><select id="country">
+                    <option>Bénin</option><option>Togo</option><option>Côte d'Ivoire</option>
+                    <option>Sénégal</option><option>Cameroun</option><option>France</option>
+                    <option>Belgique</option><option>Canada</option><option>Suisse</option><option>Autre</option>
+                </select></div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="newsletter" checked>
+                    <span>Je souhaite recevoir les nouvelles parutions et enseignements d'Amos Elite (désabonnement possible à tout moment).</span>
+                </div>
+                <button class="btn-submit" id="submitBtn" onclick="submitDownload()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    Télécharger le PDF
+                </button>
+                <div class="loader" id="formLoader">Envoi en cours...</div>
+            </div>
+        </div>
+        <div id="successContainer" style="display:none;">
+            <div class="success-view">
+                <div class="success-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+                <h3>Téléchargement lancé</h3>
+                <p id="successMessage"></p>
+                <button class="btn-retry" id="retryBtn" style="display:none;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    Retélécharger
+                </button>
+                <div class="quote">« Que la grâce vous accompagne dans cette lecture. Que ce livre édifie votre foi. »</div>
+                <button class="btn-close-modal" onclick="closeFormModal()">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Configuration du livre (un seul livre centré)
+const BOOK = {
+    id: "free_001",
+    title: "Oui, tu peux sortir des dettes",
+    subtitle: "Le chemin biblique vers la liberté financière",
+    category: "Finances",
+    pages: 96,
+    description: "Comprendre ce qui vous maintient dans l'endettement, agir pour briser la chaîne, décréter votre nouveau nom : prêteur, et non emprunteur. Un ouvrage pratique et spirituel pour retrouver une liberté financière durable selon les principes bibliques.",
+    pdfUrl: "livre.pdf",
+    coverImage: "re.jpeg"
+};
+
+function openPreview() {
+    document.getElementById('previewModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+
+function closePreviewModal() {
+    document.getElementById('previewModal').classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+function openFormModal() {
+    document.getElementById('formContainer').style.display = 'block';
+    document.getElementById('successContainer').style.display = 'none';
+    document.getElementById('formLoader').style.display = 'none';
+    document.getElementById('submitBtn').disabled = false;
+    
+    // Reset des champs
+    document.getElementById('firstName').value = '';
+    document.getElementById('lastName').value = '';
+    document.getElementById('email').value = '';
+    document.getElementById('phone').value = '';
+    document.getElementById('country').selectedIndex = 0;
+    document.getElementById('newsletter').checked = true;
+    
+    document.getElementById('formModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeFormModal() {
+    document.getElementById('formModal').classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+async function submitDownload() {
+    const firstName = document.getElementById('firstName').value.trim();
+    const lastName = document.getElementById('lastName').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const country = document.getElementById('country').value;
+    const newsletter = document.getElementById('newsletter').checked;
+    
+    if (!firstName || !lastName || !email || !phone) {
+        alert('Veuillez remplir tous les champs obligatoires (*).');
+        return;
+    }
+    if (!email.includes('@')) {
+        alert('Veuillez entrer une adresse email valide.');
+        return;
+    }
+    
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    document.getElementById('formLoader').style.display = 'block';
+    
+    // === ENVOI VERS AIRTABLE VIA VOTRE PROXY ===
+    try {
+        const response = await fetch('airtable-proxy.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                Prenom: firstName,
+                Nom: lastName,
+                Email: email,
+                Telephone: phone,
+                Pays: country,
+                Livre: BOOK.title,
+                Newsletter: newsletter,
+                Statut: 'Téléchargement gratuit'
+            })
+        });
+        const result = await response.json();
+        console.log('Airtable response:', result);
+    } catch (error) {
+        console.warn('Erreur Airtable (non bloquante):', error);
+        // Sauvegarde locale de secours
+        try {
+            const localBackup = JSON.parse(localStorage.getItem('amos_downloads') || '[]');
+            localBackup.push({ firstName, lastName, email, phone, country, book: BOOK.title, date: new Date().toISOString() });
+            localStorage.setItem('amos_downloads', JSON.stringify(localBackup));
+        } catch(e) {}
+    }
+    
+    // Déclenchement du téléchargement
+    const downloadLink = document.createElement('a');
+    downloadLink.href = BOOK.pdfUrl;
+    downloadLink.download = '';
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    setTimeout(() => document.body.removeChild(downloadLink), 150);
+    
+    document.getElementById('formLoader').style.display = 'none';
+    document.getElementById('formContainer').style.display = 'none';
+    document.getElementById('successMessage').innerHTML = `Merci ${firstName} !<br><strong>${BOOK.title}</strong> a été téléchargé.`;
+    
+    const retryBtn = document.getElementById('retryBtn');
+    retryBtn.style.display = 'inline-flex';
+    retryBtn.onclick = () => {
+        const link = document.createElement('a');
+        link.href = BOOK.pdfUrl;
+        link.download = '';
+        document.body.appendChild(link);
+        link.click();
+        setTimeout(() => document.body.removeChild(link), 100);
+    };
+    
+    document.getElementById('successContainer').style.display = 'block';
+}
+
+// Fermeture des modals au clic sur l'overlay
+document.getElementById('previewModal').addEventListener('click', function(e) {
+    if (e.target === this) closePreviewModal();
+});
+document.getElementById('formModal').addEventListener('click', function(e) {
+    if (e.target === this) closeFormModal();
+});
+</script>
+</body>
+</html>
